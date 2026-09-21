@@ -1,11 +1,11 @@
 {
   "info": {
-    "name": "Todo App API - Dean Adiba Anugrah",
+    "name": "Tugas Praktikum 3 - Todo API",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
     {
-      "name": "1. Register",
+      "name": "0. Register",
       "request": {
         "method": "POST",
         "header": [
@@ -21,33 +21,23 @@
         "url": {
           "raw": "http://localhost:5000/api/auth/register",
           "protocol": "http",
-          "host": [
-            "localhost"
-          ],
+          "host": ["localhost"],
           "port": "5000",
-          "path": [
-            "api",
-            "auth",
-            "register"
-          ]
+          "path": ["api", "auth", "register"]
         }
       }
     },
     {
-      "name": "2. Login",
+      "name": "0. Login",
       "event": [
         {
           "listen": "test",
           "script": {
             "exec": [
-              "// Mengambil respons berbentuk JSON",
               "const response = pm.response.json();",
-              "",
-              "// Mengecek apakah login sukses dan token tersedia",
               "if (response.success && response.token) {",
-              "    // Menyimpan token ke dalam variabel global Postman bernama 'jwt_token'",
               "    pm.globals.set(\"jwt_token\", response.token);",
-              "    console.log(\"Token berhasil disimpan otomatis!\");",
+              "    console.log(\"Token berhasil disimpan ke global variable jwt_token!\");",
               "}"
             ],
             "type": "text/javascript"
@@ -69,20 +59,14 @@
         "url": {
           "raw": "http://localhost:5000/api/auth/login",
           "protocol": "http",
-          "host": [
-            "localhost"
-          ],
+          "host": ["localhost"],
           "port": "5000",
-          "path": [
-            "api",
-            "auth",
-            "login"
-          ]
+          "path": ["api", "auth", "login"]
         }
       }
     },
     {
-      "name": "3. Post Task",
+      "name": "0. Add Task (Setup Data)",
       "request": {
         "method": "POST",
         "header": [
@@ -103,24 +87,19 @@
         },
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"task\": \"Belajar Pemrograman Web Framework oleh Dean Adiba Anugrah\"\n}"
+          "raw": "{\n  \"task\": \"Uji coba endpoint dengan struktur MVC baru\"\n}"
         },
         "url": {
           "raw": "http://localhost:5000/api/todos",
           "protocol": "http",
-          "host": [
-            "localhost"
-          ],
+          "host": ["localhost"],
           "port": "5000",
-          "path": [
-            "api",
-            "todos"
-          ]
+          "path": ["api", "todos"]
         }
       }
     },
     {
-      "name": "4. Get Task",
+      "name": "1. Get Task (Sebelum Perubahan)",
       "request": {
         "method": "GET",
         "header": [],
@@ -137,14 +116,142 @@
         "url": {
           "raw": "http://localhost:5000/api/todos",
           "protocol": "http",
-          "host": [
-            "localhost"
-          ],
+          "host": ["localhost"],
           "port": "5000",
-          "path": [
-            "api",
-            "todos"
+          "path": ["api", "todos"]
+        }
+      }
+    },
+    {
+      "name": "2. Put Task",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{jwt_token}}",
+              "type": "string"
+            }
           ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"task\": \"Uji coba endpoint dengan struktur MVC baru\",\n  \"is_completed\": true\n}"
+        },
+        "url": {
+          "raw": "http://localhost:5000/api/todos/13",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["api", "todos", "13"]
+        }
+      }
+    },
+    {
+      "name": "3. Delete Task",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{jwt_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://localhost:5000/api/todos/14",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["api", "todos", "14"]
+        }
+      }
+    },
+    {
+      "name": "4. Get Task 13 (Setelah Edit)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{jwt_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://localhost:5000/api/todos/13",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["api", "todos", "13"]
+        }
+      }
+    },
+    {
+      "name": "5. Get Task 14 (Setelah Delete)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{jwt_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://localhost:5000/api/todos/14",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["api", "todos", "14"]
+        }
+      }
+    },
+    {
+      "name": "6. 404 Handler",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5000/api/sembarang",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["api", "sembarang"]
+        }
+      }
+    },
+    {
+      "name": "7. Auth Handler",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5000/api/todos",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["api", "todos"]
         }
       }
     }
