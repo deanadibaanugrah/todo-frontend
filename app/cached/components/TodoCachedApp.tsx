@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useSyncExternalStore } from 'react';
 import TodoForm from '@/app/components/TodoForm';
 import TodoList from '@/app/components/TodoList';
 import { Button } from '@/app/components/ui/button';
@@ -10,19 +10,16 @@ type TodoCachedAppProps = {
   initialTodos: Todo[];
 };
 
+const emptySubscribe = () => () => {};
+
 export default function TodoCachedApp({ initialTodos }: TodoCachedAppProps) {
   const [todos, setTodos] = useLocalStorage<Todo[]>('TODO_LIST_CACHE', initialTodos);
-
-  const [isMounted, setIsMounted] = useState(false);
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
+  const isMounted = useSyncExternalStore(emptySubscribe, () => true, () => false);
 
   const handleAddTodo = (title: string) => {
     const newTodo: Todo = {
       id: Date.now(),
       title,
-      description: "",
       completed: false,
       createdAt: new Date().toISOString().split('T')[0],
     };

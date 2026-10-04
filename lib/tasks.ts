@@ -6,7 +6,6 @@ export function formatTodo(apiTodo: DummyJSONTodo): Todo {
   return {
     id: apiTodo.id,
     title: apiTodo.todo,
-    description: `Tugas dari DummyJSON user ${apiTodo.userId}`,
     completed: apiTodo.completed,
     createdAt: new Date().toISOString().split('T')[0],
   };
@@ -14,8 +13,7 @@ export function formatTodo(apiTodo: DummyJSONTodo): Todo {
 
 export async function getTasks(): Promise<Todo[]> {
   try {
-    const data = await todoService.getTodos();
-    return data.todos.map(formatTodo);
+    return await todoService.getTodos();
   } catch (error) {
     console.error('Failed to fetch tasks:', error);
     return [];
@@ -24,9 +22,9 @@ export async function getTasks(): Promise<Todo[]> {
 
 export async function getTaskById(id: string): Promise<Todo | null> {
   try {
-    const data = await todoService.getTodos();
-    const todo = data.todos.find(t => t.id === Number(id));
-    return todo ? formatTodo(todo) : null;
+    const todos = await todoService.getTodos();
+    const todo = todos.find((t) => t.id === Number(id));
+    return todo || null;
   } catch (error) {
     console.error('Failed to fetch task by id:', error);
     return null;
